@@ -69,6 +69,7 @@ Once again consider your left and right lists. What is their similarity score?
 """
 
 import argparse
+import os.path
 
 
 def read_input(file_path: str) -> tuple[list, list]:
@@ -78,6 +79,8 @@ def read_input(file_path: str) -> tuple[list, list]:
 
     The first list is the left list and the second list is the right list.
     """
+
+    assert os.path.exists(file_path), f"File not found: {file_path}"
     with open(file_path, "r") as file:
         left_list, right_list = [], []
         for line in file:
