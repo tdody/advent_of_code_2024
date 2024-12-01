@@ -1,0 +1,15 @@
+[project]
+name = "advent_of_code_2024"
+version = "0.1.0"
+description = "Default template for PDM package"
+authors = [
+    {name = "Thibault Dody", email = "thibault.dody@gmail.com"},
+]
+dependencies = []
+requires-python = "==3.10.*"
+readme = "README.md"
+license = {text = "MIT"}
+
+
+[tool.pdm]
+distribution = false
