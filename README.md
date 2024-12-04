@@ -1,8 +1,8 @@
 # advent_of_code_2024
 
 - [X] Day 1 Historian Hysteria
-- [ ] Day 2
-- [ ] Day 3
+- [X] Day 2 Red-Nosed Reports
+- [X] Day 3 Mull It Over
 - [ ] Day 4
 - [ ] Day 5
 - [ ] Day 6

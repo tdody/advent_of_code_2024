@@ -170,6 +170,4 @@ if __name__ == "__main__":
     if part == 1:
         print(part_1(file_path))
     else:
-        # l = [int(x) for x in "1 2 7 8 9".split()]
-        # print(is_safe_with_dampener(l))
         print(part_2(file_path))
