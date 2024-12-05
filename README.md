@@ -3,8 +3,8 @@
 - [X] Day 1 Historian Hysteria
 - [X] Day 2 Red-Nosed Reports
 - [X] Day 3 Mull It Over
-- [ ] Day 4 Ceres Search
-- [ ] Day 5
+- [X] Day 4 Ceres Search
+- [X] Day 5 Print Queue
 - [ ] Day 6
 - [ ] Day 7
 - [ ] Day 8
