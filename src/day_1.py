@@ -125,9 +125,9 @@ if __name__ == "__main__":
 
     args = argsparse.parse_args()
     file_path = args.file_path
-    part = args.part
+    challenge_part = args.part
 
-    if part == 1:
+    if challenge_part == 1:
         print(part_1(file_path))
     else:
         print(part_2(file_path))
