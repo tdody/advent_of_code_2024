@@ -5,7 +5,7 @@
 - [X] Day 3 Mull It Over
 - [X] Day 4 Ceres Search
 - [X] Day 5 Print Queue
-- [ ] Day 6
+- [X] Day 6 Guard Gallivant
 - [ ] Day 7
 - [ ] Day 8
 - [ ] Day 9
