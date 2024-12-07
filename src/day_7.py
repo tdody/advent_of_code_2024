@@ -73,6 +73,9 @@ def part_1(file_path: str) -> int:
                 else:
                     result *= numbers[j + 1]
 
+                if result > test_value:
+                    break
+
             if result == test_value:
                 total += test_value
                 break
@@ -105,6 +108,9 @@ def part_2(file_path: str) -> int:
                     result *= numbers[j + 1]
                 else:
                     result = int(str(result) + str(numbers[j + 1]))
+
+                if result > test_value:
+                    break
 
             if result == test_value:
                 total += test_value
