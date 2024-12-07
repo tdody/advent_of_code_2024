@@ -6,7 +6,7 @@
 - [X] Day 4 Ceres Search
 - [X] Day 5 Print Queue
 - [X] Day 6 Guard Gallivant
-- [ ] Day 7
+- [X] Day 7 Bridge Repair
 - [ ] Day 8
 - [ ] Day 9
 - [ ] Day 10
