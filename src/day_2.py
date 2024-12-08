@@ -53,8 +53,6 @@ Update your analysis by handling situations where the Problem Dampener can remov
 
 """
 
-import argparse
-
 from loguru import logger
 
 
@@ -152,22 +150,3 @@ def part_2(file_path: str) -> int:
             safe_reports += 1
 
     return safe_reports
-
-
-if __name__ == "__main__":
-    argsparse = argparse.ArgumentParser()
-    argsparse.add_argument(
-        "--file_path", type=str, help="The path to the input file.", required=True
-    )
-    argsparse.add_argument(
-        "--part", type=int, help="The part of the challenge to run.", required=True
-    )
-
-    args = argsparse.parse_args()
-    file_path = args.file_path
-    part = args.part
-
-    if part == 1:
-        print(part_1(file_path))
-    else:
-        print(part_2(file_path))

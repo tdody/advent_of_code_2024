@@ -177,8 +177,6 @@ It doesn't really matter what you choose to use as an obstacle so long as you an
 You need to get the guard stuck in a loop by adding a single new obstruction. How many different positions could you choose for this obstruction?
 """
 
-import argparse
-
 from loguru import logger
 
 
@@ -213,7 +211,9 @@ class Position:
     def __str__(self):
         return f"Position: {self.row}, {self.col}"
 
-    def __eq__(self, other: "Position"):
+    def __eq__(self, other: object):
+        if not isinstance(other, Position):
+            return NotImplemented
         return self.row == other.row and self.col == other.col
 
     def __hash__(self):
@@ -238,13 +238,13 @@ class Guard:
     def rotate_right(self) -> None:
         self.turns.append(self.position)
         if self.direction == Direction.UP:
-            self.direction = Direction.RIGHT
+            self.direction = Direction.get_direction("RIGHT")
         elif self.direction == Direction.RIGHT:
-            self.direction = Direction.DOWN
+            self.direction = Direction.get_direction("DOWN")
         elif self.direction == Direction.DOWN:
-            self.direction = Direction.LEFT
+            self.direction = Direction.get_direction("LEFT")
         elif self.direction == Direction.LEFT:
-            self.direction = Direction.UP
+            self.direction = Direction.get_direction("UP")
 
     def get_immediate_next_position(self) -> Position:
         if self.direction == Direction.UP:
@@ -255,6 +255,8 @@ class Guard:
             return Position(self.position.row, self.position.col - 1)
         elif self.direction == Direction.RIGHT:
             return Position(self.position.row, self.position.col + 1)
+        else:
+            raise ValueError("Invalid direction.")
 
     def get_next_position(self, grid: "Grid") -> Position:
         # determine if an obstacle is located on the path
@@ -400,6 +402,9 @@ class Guard:
 
             return Position(self.position.row, grid.n_cols - 1)
 
+        else:
+            raise ValueError("Invalid direction.")
+
     def is_out(self, grid: "Grid") -> bool:
         """
         Check if the guard is out of the grid.
@@ -422,6 +427,8 @@ class Guard:
         for obstacle in obstacles:
             if next_position == obstacle:
                 return True
+
+        return False
 
     def has_loop(self):
         """
@@ -450,7 +457,7 @@ class Grid:
 
     def __init__(
         self,
-        grid: list[str],
+        grid: list[list[str]],
         guard: Guard,
         obstacles: list[Obstacle],
         visited_positions: set[Position],
@@ -504,9 +511,9 @@ class Grid:
             updated_grid[position.row][position.col] = "X"
 
         # Add guard position
-        updated_grid[self.guard.position.row][self.guard.position.col] = (
+        updated_grid[self.guard.position.row][self.guard.position.col] = str(
             self.guard.direction
-        )
+        )  # Convert Direction to string
 
         # Add obstacles
         for obstacle in self.obstacles:
@@ -547,7 +554,7 @@ class Grid:
         print(self.n_visited_positions)
 
 
-def read_map(file_path: str) -> list[str]:
+def read_map(file_path: str) -> list[list[str]]:
     with open(file_path, "r") as file:
         return [[c for c in line.strip()] for line in file]
 
@@ -616,32 +623,3 @@ def part_2(file_path: str):
         logger.info(f"Done with position {i+1}/{len(possible_positions)}.")
 
     print(f"Found {looping_obstacles} looping obstacles.")
-
-
-if __name__ == "__main__":
-    argsparse = argparse.ArgumentParser()
-    argsparse.add_argument(
-        "--day", type=int, help="The day of the challenge to run.", required=True
-    )
-    argsparse.add_argument(
-        "--test",
-        help="Run the test cases for the challenge.",
-        action="store_true",
-    )
-    argsparse.add_argument(
-        "--part", type=int, help="The part of the challenge to run.", required=True
-    )
-
-    args = argsparse.parse_args()
-    day = args.day
-    part = args.part
-    test = args.test
-
-    file_path = f"inputs/day_{day}_input" + ("_test" if test else "") + ".txt"
-
-    if part == 1:
-        print(part_1(file_path))
-    elif part == 2:
-        print(part_2(file_path))
-    else:
-        print("No valid option selected.")

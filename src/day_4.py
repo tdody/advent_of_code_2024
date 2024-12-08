@@ -65,8 +65,6 @@ In this example, an X-MAS appears 9 times.
 Flip the word search from the instructions back over to the word search side and try again. How many times does an X-MAS appear?
 """
 
-import argparse
-
 
 class LetterGrid:
     grid: list[list[str]]
@@ -222,73 +220,6 @@ def part_1(file_path: str) -> int:
     return find_xmas(grid)
 
 
-def part_1_test():
-    input = """
-        MMMSXXMASM
-        MSAMXMSMSA
-        AMXSXMAAMM
-        MSAMASMSMX
-        XMASAMXAMM
-        XXAMMXXAMA
-        SMSMSASXSS
-        SAXAMASAAA
-        MAMMMXMMMM
-        MXMXAXMASX
-    """
-    grid = LetterGrid.from_str(input)
-    print(grid)
-    result = find_xmas(grid)
-    assert result == 18
-
-
 def part_2(file_path: str) -> int:
     grid = read_input(file_path)
     return find_x_mas(grid)
-
-
-def part_2_test():
-    input = """
-        .M.S......
-        ..A..MSMS.
-        .M.S.MAA..
-        ..A.ASMSM.
-        .M.S.M....
-        ..........
-        S.S.S.S.S.
-        .A.A.A.A..
-        M.M.M.M.M.
-        ..........
-    """
-    grid = LetterGrid.from_str(input)
-    print(grid)
-    result = find_x_mas(grid)
-    assert result == 9
-
-
-if __name__ == "__main__":
-    argsparse = argparse.ArgumentParser()
-    argsparse.add_argument(
-        "--file_path", type=str, help="The path to the input file.", required=True
-    )
-    argsparse.add_argument(
-        "--part", type=int, help="The part of the challenge to run.", required=True
-    )
-    argsparse.add_argument(
-        "--test", action="store_true", help="Run the test for the part."
-    )
-
-    args = argsparse.parse_args()
-    file_path = args.file_path
-    part = args.part
-    test = args.test
-
-    if part == 1 and not test:
-        print(part_1(file_path))
-    elif test and part == 1:
-        part_1_test()
-    elif part == 2 and not test:
-        print(part_2(file_path))
-    elif test and part == 2:
-        part_2_test()
-    else:
-        print("No valid option selected.")

@@ -35,7 +35,6 @@ This time, the sum of the results is 48 (2*4 + 8*5).
 
 """
 
-import argparse
 import re
 
 VALID_REGEX = r"mul\((\d{1,3}),(\d{1,3})\)"
@@ -68,22 +67,3 @@ def part_2(file_path: str) -> int:
             total += int(match[0]) * int(match[1])
 
     return total
-
-
-if __name__ == "__main__":
-    argsparse = argparse.ArgumentParser()
-    argsparse.add_argument(
-        "--file_path", type=str, help="The path to the input file.", required=True
-    )
-    argsparse.add_argument(
-        "--part", type=int, help="The part of the challenge to run.", required=True
-    )
-
-    args = argsparse.parse_args()
-    file_path = args.file_path
-    part = args.part
-
-    if part == 1:
-        print(part_1(file_path))
-    else:
-        print(part_2(file_path))

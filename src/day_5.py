@@ -87,8 +87,6 @@ After taking only the incorrectly-ordered updates and ordering them correctly, t
 Find the updates which are not in the correct order. What do you get if you add up the middle page numbers after correctly ordering just those updates?
 """
 
-import argparse
-
 from loguru import logger
 
 
@@ -260,24 +258,3 @@ def part_2(file_path: str) -> int:
         middle_pages.append(re_ordered_update.pages[len(re_ordered_update.pages) // 2])
 
     return sum(middle_pages)
-
-
-if __name__ == "__main__":
-    argsparse = argparse.ArgumentParser()
-    argsparse.add_argument(
-        "--file_path", type=str, help="The path to the input file.", required=True
-    )
-    argsparse.add_argument(
-        "--part", type=int, help="The part of the challenge to run.", required=True
-    )
-
-    args = argsparse.parse_args()
-    file_path = args.file_path
-    part = args.part
-
-    if part == 1:
-        print(part_1(file_path))
-    elif part == 2:
-        print(part_2(file_path))
-    else:
-        print("No valid option selected.")

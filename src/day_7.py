@@ -54,9 +54,9 @@ def part_1(file_path: str) -> int:
 
     total = 0
     for line in lines:
-        line = line.strip().split(":")
-        test_value = int(line[0])
-        numbers = list(map(int, line[1].split()))
+        line_content = line.strip().split(":")
+        test_value = int(line_content[0])
+        numbers = list(map(int, line_content[1].split()))
 
         n_operators = len(numbers) - 1
 
@@ -89,9 +89,9 @@ def part_2(file_path: str) -> int:
 
     total = 0
     for line in lines:
-        line = line.strip().split(":")
-        test_value = int(line[0])
-        numbers = list(map(int, line[1].split()))
+        line_content = line.strip().split(":")
+        test_value = int(line_content[0])
+        numbers = list(map(int, line_content[1].split()))
 
         n_operators = len(numbers) - 1
 
@@ -117,32 +117,3 @@ def part_2(file_path: str) -> int:
                 break
 
     return total
-
-
-if __name__ == "__main__":
-    argsparse = argparse.ArgumentParser()
-    argsparse.add_argument(
-        "--day", type=int, help="The day of the challenge to run.", required=True
-    )
-    argsparse.add_argument(
-        "--test",
-        help="Run the test cases for the challenge.",
-        action="store_true",
-    )
-    argsparse.add_argument(
-        "--part", type=int, help="The part of the challenge to run.", required=True
-    )
-
-    args = argsparse.parse_args()
-    day = args.day
-    part = args.part
-    test = args.test
-
-    file_path = f"inputs/day_{day}_input" + ("_test" if test else "") + ".txt"
-
-    if part == 1:
-        print(part_1(file_path))
-    elif part == 2:
-        print(part_2(file_path))
-    else:
-        print("No valid option selected.")

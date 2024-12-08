@@ -68,7 +68,6 @@ So, for these example lists, the similarity score at the end of this process is 
 Once again consider your left and right lists. What is their similarity score?
 """
 
-import argparse
 import os.path
 
 
@@ -112,22 +111,3 @@ def part_2(file_path: str) -> int:
         similarity_score += right_list.count(number) * number
 
     return similarity_score
-
-
-if __name__ == "__main__":
-    argsparse = argparse.ArgumentParser()
-    argsparse.add_argument(
-        "--file_path", type=str, help="The path to the input file.", required=True
-    )
-    argsparse.add_argument(
-        "--part", type=int, help="The part of the challenge to run.", required=True
-    )
-
-    args = argsparse.parse_args()
-    file_path = args.file_path
-    challenge_part = args.part
-
-    if challenge_part == 1:
-        print(part_1(file_path))
-    else:
-        print(part_2(file_path))
