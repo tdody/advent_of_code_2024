@@ -211,72 +211,44 @@ class Grid:
             antinodes.add(antenna_2.position)
 
             # compute the difference between the x and y coordinates
-            x_diff = x1 - x2
-            y_diff = y1 - y2
+            # the diff is the delta from antenna_1 to antenna_2
+            x_diff = x2 - x1
+            y_diff = y2 - y1
 
             # for each antenna decide if the delta needs to be added or subtracted
             factor: int = 1
             stop: bool = False
-            if x2 == x1 + x_diff and y2 == y1 + y_diff:
-                # then we need to subtract the delta
 
-                while not stop:
-                    stop_1 = antenna_1.is_out_of_bounds(
-                        -x_diff, -y_diff, self.grid, factor=factor
-                    )
-                    stop_2 = antenna_2.is_out_of_bounds(
-                        x_diff, y_diff, self.grid, factor=factor
-                    )
+            while not stop:
+                stop_1 = antenna_1.is_out_of_bounds(
+                    x_diff, y_diff, self.grid, factor=factor
+                )
+                stop_2 = antenna_1.is_out_of_bounds(
+                    x_diff, y_diff, self.grid, factor=-factor
+                )
 
-                    if stop_1 and stop_2:
-                        stop = True
-                        break
+                if stop_1 and stop_2:
+                    stop = True
+                    break
 
-                    # check if the new position is within the grid
-                    if not antenna_1.is_out_of_bounds(
-                        -x_diff, -y_diff, self.grid, factor=factor
-                    ):
-                        antinodes.add(
-                            Position(x1 - x_diff * factor, y1 - y_diff * factor)
-                        )
-                    if not antenna_2.is_out_of_bounds(x_diff, y_diff, self.grid):
-                        antinodes.add(
-                            Position(x2 + x_diff * factor, y2 + y_diff * factor)
-                        )
+                # check if the new position is within the grid
+                if not antenna_1.is_out_of_bounds(
+                    x_diff, y_diff, self.grid, factor=factor
+                ):
+                    antinodes.add(Position(x1 + x_diff * factor, y1 + y_diff * factor))
+                if not antenna_1.is_out_of_bounds(
+                    x_diff, y_diff, self.grid, factor=-factor
+                ):
+                    antinodes.add(Position(x1 - x_diff * factor, y1 - y_diff * factor))
 
-                    factor += 1
-
-            else:
-                # then we need to add the delta
-
-                while not stop:
-                    stop_1 = antenna_1.is_out_of_bounds(
-                        x_diff, y_diff, self.grid, factor=factor
-                    )
-                    stop_2 = antenna_2.is_out_of_bounds(
-                        -x_diff, -y_diff, self.grid, factor=factor
-                    )
-
-                    if stop_1 and stop_2:
-                        stop = True
-                        break
-                    # check if the new position is within the grid
-                    if not stop_1:
-                        antinodes.add(
-                            Position(x1 + x_diff * factor, y1 + y_diff * factor)
-                        )
-
-                    if not stop_2:
-                        antinodes.add(
-                            Position(x2 - x_diff * factor, y2 - y_diff * factor)
-                        )
-
-                    factor += 1
+                factor += 1
 
         return antinodes
 
     def get_antinodes_between(
-        self, antenna_1: Antenna, antenna_2: Antenna
+        self,
+        antenna_1: Antenna,
+        antenna_2: Antenna,
     ) -> set[Position]:
         antinodes: set[Position] = set()
 
@@ -287,26 +259,15 @@ class Grid:
             y2 = antenna_2.position.y
 
             # compute the difference between the x and y coordinates
-            x_diff = x1 - x2
-            y_diff = y1 - y2
+            # the diff is the delta from antenna_1 to antenna_2
+            x_diff = x2 - x1
+            y_diff = y2 - y1
 
             # for each antenna decide if the delta needs to be added or subtracted
-            if x2 == x1 + x_diff and y2 == y1 + y_diff:
-                # then we need to subtract the delta
-
+            for i in [-1, 2]:
                 # check if the new position is within the grid
-                if not antenna_1.is_out_of_bounds(-x_diff, -y_diff, self.grid):
-                    antinodes.add(Position(x1 - x_diff, y1 - y_diff))
-                if not antenna_2.is_out_of_bounds(x_diff, y_diff, self.grid):
-                    antinodes.add(Position(x2 + x_diff, y2 + y_diff))
-            else:
-                # then we need to add the delta
-
-                # check if the new position is within the grid
-                if not antenna_1.is_out_of_bounds(x_diff, y_diff, self.grid):
-                    antinodes.add(Position(x1 + x_diff, y1 + y_diff))
-                if not antenna_2.is_out_of_bounds(-x_diff, -y_diff, self.grid):
-                    antinodes.add(Position(x2 - x_diff, y2 - y_diff))
+                if not antenna_1.is_out_of_bounds(x_diff, y_diff, self.grid, factor=i):
+                    antinodes.add(Position(x1 + x_diff * i, y1 + y_diff * i))
 
         return antinodes
 
