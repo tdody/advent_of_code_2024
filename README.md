@@ -12,7 +12,7 @@ https://adventofcode.com/
 - [X] Day 5 Print Queue
 - [X] Day 6 Guard Gallivant
 - [X] Day 7 Bridge Repair
-- [ ] Day 8
+- [X] Day 8 Resonant Collinearity
 - [ ] Day 9
 - [ ] Day 10
 - [ ] Day 11
