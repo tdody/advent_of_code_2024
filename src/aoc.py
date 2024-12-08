@@ -1,5 +1,5 @@
 """
-Main module for Advent of Code 2020
+Main module for Advent of Code 2024
 """
 
 import argparse
