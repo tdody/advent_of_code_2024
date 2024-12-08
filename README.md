@@ -1,4 +1,7 @@
-# advent_of_code_2024
+![Advent of Code 2024](https://github.com/tdody/advent_of_code_2024/blob/master/images/Banner.jpg?raw=true)
+
+
+# Advent of Code 2024
 
 https://adventofcode.com/
 
