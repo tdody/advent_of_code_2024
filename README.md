@@ -14,7 +14,7 @@ https://adventofcode.com/
 - [X] Day 7 Bridge Repair
 - [X] Day 8 Resonant Collinearity
 - [X] Day 9 Disk Fragmenter
-- [ ] Day 10
+- [X] Day 10 Hoof It
 - [ ] Day 11
 - [ ] Day 12
 - [ ] Day 13
