@@ -16,7 +16,7 @@ https://adventofcode.com/
 - [X] Day 9 Disk Fragmenter
 - [X] Day 10 Hoof It
 - [X] Day 11 Plutonian Pebbles
-- [ ] Day 12
+- [X] Day 12
 - [ ] Day 13
 - [ ] Day 14
 - [ ] Day 15
