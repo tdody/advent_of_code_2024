@@ -16,8 +16,8 @@ https://adventofcode.com/
 - [X] Day 9 Disk Fragmenter
 - [X] Day 10 Hoof It
 - [X] Day 11 Plutonian Pebbles
-- [X] Day 12
-- [ ] Day 13
+- [X] Day 12 Garden Groups
+- [X] Day 13 Claw Contraption
 - [ ] Day 14
 - [ ] Day 15
 - [ ] Day 16
