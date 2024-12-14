@@ -18,7 +18,7 @@ https://adventofcode.com/
 - [X] Day 11 Plutonian Pebbles
 - [X] Day 12 Garden Groups
 - [X] Day 13 Claw Contraption
-- [ ] Day 14
+- [X] Day 14 Restroom Redoubt
 - [ ] Day 15
 - [ ] Day 16
 - [ ] Day 17
