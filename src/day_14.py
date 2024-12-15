@@ -125,8 +125,8 @@ What is the fewest number of seconds that must elapse for the robots to display 
 
 import re
 
-from loguru import logger
 import matplotlib.pyplot as plt
+from loguru import logger
 
 
 class Robot:

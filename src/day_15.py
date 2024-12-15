@@ -402,9 +402,18 @@ The sum of these boxes' GPS coordinates is 9021.
 Predict the motion of the robot and boxes in this new, scaled-up warehouse. What is the sum of all boxes' final GPS coordinates?
 """
 
+import os
 import re
+from enum import Enum
+from typing import Optional
 
 from loguru import logger
+
+
+class MoveStatus(Enum):
+    BLOCKED_BY_WALL = "BLOCKED_BY_WALL"
+    MOVING_WITH_BOX = "MOVING_WITH_BOX"
+    MOVING_WITHOUT_BOX = "MOVING_WITHOUT_BOX"
 
 
 class Style:
@@ -430,18 +439,31 @@ class Position:
     def __hash__(self):
         return hash((self.x, self.y))
 
+    def __str__(self):
+        return f"Position({self.x}, {self.y})"
+
+    def __repr__(self):
+        return f"Position({self.x}, {self.y})"
+
 
 class Box:
     position: Position
+    width: int
 
-    def __init__(self, x: int, y: int):
+    def __init__(self, x: int, y: int, width: int):
         self.position = Position(x, y)
+        self.width = width
 
-    def plot(self):
-        return Style.RED + "#" + Style.RESET
+    def plot(self) -> list[str]:
+        if self.width == 1:
+            return [Style.RED + "O" + Style.RESET]
+        elif self.width == 2:
+            return [Style.RED + "[" + Style.RESET, Style.RED + "]" + Style.RESET]
+        else:
+            raise ValueError("Invalid box width")
 
     def __hash__(self):
-        return hash((self.position.x, self.position.y))
+        return hash((self.position.x, self.position.y, self.width))
 
     def __str__(self):
         return f"Box({self.position.x}, {self.position.y})"
@@ -526,7 +548,9 @@ class Warehouse:
     def plot(self):
         warehouse = [["." for _ in range(self.width)] for _ in range(self.height)]
         for box in self.boxes:
-            warehouse[box.position.y][box.position.x] = box.plot()
+            box_disp = box.plot()
+            for i, c in enumerate(box_disp):
+                warehouse[box.position.y][box.position.x + i] = c
         warehouse[self.robot.position.y][self.robot.position.x] = self.robot.plot()
         for wall in self.walls:
             warehouse[wall.position.y][wall.position.x] = wall.plot()
@@ -536,48 +560,97 @@ class Warehouse:
         print()
 
     def is_empty_at(self, x: int, y: int) -> bool:
-        for box in self.boxes:
-            if box.position.x == x and box.position.y == y:
-                return False
-        for wall in self.walls:
-            if wall.position.x == x and wall.position.y == y:
-                return False
+        if self.get_box_at(x, y):
+            return False
+        if self.get_wall_at(x, y):
+            return False
         return True
 
-    def is_wall_at(self, x: int, y: int) -> bool:
+    def get_wall_at(self, x: int, y: int) -> Optional[Wall]:
         for wall in self.walls:
             if wall.position.x == x and wall.position.y == y:
-                return True
-        return False
+                return wall
+        return None
 
-    def is_box_at(self, x: int, y: int) -> bool:
+    def get_box_at(self, x: int, y: int) -> Optional[Box]:
         for box in self.boxes:
-            if box.position.x == x and box.position.y == y:
-                return True
-        return False
+            if (
+                box.position.x == x or box.position.x + (box.width - 1) == x
+            ) and box.position.y == y:
+                return box
+        return None
 
-    def get_boxes_along(self, movement: str) -> list[Box]:
+    def get_boxes_to_move(self, movement: str) -> tuple[list[Box], MoveStatus]:
         dx, dy = Movements.get_dx_dy(movement)
-        boxes = []
+        boxes: list[Box] = []
         increment = 1
-        while True:
-            new_x, new_y = (
-                self.robot.position.x + dx * increment,
-                self.robot.position.y + dy * increment,
-            )
+        valid_move = False
 
-            if self.is_box_at(new_x, new_y):
-                boxes.append(Box(new_x, new_y))
-            elif self.is_wall_at(new_x, new_y):
-                raise Exception("Wall in the way")
-            elif self.is_empty_at(new_x, new_y):
-                break
+        boxes_to_move: list[list[Box]] = []
+
+        logger.debug(
+            f"Robot position: {self.robot.position.x}, {self.robot.position.y}"
+        )
+
+        while not valid_move:
+            positions: list[Position] = []
+
+            if increment == 1:
+                positions = [
+                    Position(self.robot.position.x + dx, self.robot.position.y + dy)
+                ]
             else:
-                raise Exception("Unknown object in the way")
+                for box in boxes_to_move[-1]:
+                    if box.width == 1:
+                        next_position = Position(
+                            box.position.x + dx, box.position.y + dy
+                        )
+                    elif box.width == 2 and dx > 0:
+                        next_position = Position(
+                            box.position.x + dx + dx, box.position.y + dy
+                        )
+                    else:
+                        next_position = Position(
+                            box.position.x + dx, box.position.y + dy
+                        )
+                    if next_position not in positions:
+                        positions.append(next_position)
+                    if box.width == 2 and dy != 0:
+                        next_position = Position(
+                            box.position.x + dx + 1, box.position.y + dy
+                        )
+                        if next_position not in positions:
+                            positions.append(next_position)
+
+            logger.debug(f"Looking at positions: {positions}")
+
+            boxes_to_move.append([])
+
+            for position in positions:
+                new_box = self.get_box_at(position.x, position.y)
+                if new_box:
+                    if new_box not in boxes:
+                        logger.debug(f"Found box at {position.x}, {position.y}")
+                        boxes_to_move[-1].append(new_box)
+                elif self.get_wall_at(position.x, position.y):
+                    logger.debug(f"Wall at {position.x}, {position.y}")
+                    return [], MoveStatus.BLOCKED_BY_WALL
+
+            logger.debug(f"Boxes to move: {boxes_to_move}")
+
+            if len(boxes_to_move[-1]) == 0:
+                logger.debug(f"No boxes found at {positions}")
+                valid_move = True
 
             increment += 1
 
-        return boxes
+        # collapse the list of lists into a single list
+        unique_boxes = set([box for sublist in boxes_to_move for box in sublist])
+
+        if unique_boxes:
+            return list(unique_boxes), MoveStatus.MOVING_WITH_BOX
+        else:
+            return [], MoveStatus.MOVING_WITHOUT_BOX
 
     def move_boxes(self, boxes_to_move: list[Box], movement: str):
         dx, dy = Movements.get_dx_dy(movement)
@@ -590,7 +663,6 @@ class Warehouse:
                 box.position.y = new_y
                 moved_boxes.append(box)
             else:
-                logger.debug(f"Box {box} not moved, not found in {boxes_to_move}")
                 moved_boxes.append(box)
 
         self.boxes = moved_boxes
@@ -603,24 +675,30 @@ class Warehouse:
         logger.debug(f"Moving robot to {new_x}, {new_y}")
 
     @classmethod
-    def from_input_file(cls, file_path: str):
+    def from_input_file(cls, file_path: str, part_number: int):
         boxes = []
         robot = None
         walls = []
         movements = Movements("")
+
+        factor = 1 if part_number == 1 else 2
+
         with open(file_path, "r") as file:
             lines = file.readlines()
-            width = len(lines[0].strip())
+            width = len(lines[0].strip()) * factor
             height = 0
             for y, line in enumerate(lines):
                 if line[0] == "#":
                     for x, char in enumerate(line.strip()):
                         if char == "O":
-                            boxes.append(Box(x, y))
+                            boxes.append(Box(factor * x, y, width=factor))
                         elif char == "@":
-                            robot = Robot(x, y)
+                            robot = Robot(factor * x, y)
                         elif char == "#":
-                            walls.append(Wall(x, y))
+                            walls.append(Wall(factor * x, y))
+                            if factor == 2:
+                                walls.append(Wall(factor * x + 1, y))
+                            walls
                     height += 1
 
                 elif line == "":
@@ -644,63 +722,17 @@ class Warehouse:
             recursively_push(self, move)
 
 
-def is_move_valid(warehouse: Warehouse, move: str):
-    """
-    Check that there is an empty space between the robot
-    and the first wall in the direction of the move.
-    """
-
-    is_valid = False
-    robot = warehouse.robot
-    dx, dy = Movements.get_dx_dy(move)
-
-    logger.debug(f"Robot position: {robot.position.x}, {robot.position.y}")
-    logger.debug(f"Move: {move}")
-
-    increment = 1
-
-    while True:
-        logger.debug(f"Checking increment {increment}")
-        new_x, new_y = (
-            robot.position.x + dx * increment,
-            robot.position.y + dy * increment,
-        )
-
-        if warehouse.is_empty_at(new_x, new_y):
-            is_valid = True
-            break
-
-        logger.debug(f"New position not empty: {new_x}, {new_y}")
-
-        if (
-            new_x < 0
-            or new_x >= warehouse.width
-            or new_y < 0
-            or new_y >= warehouse.height
-        ):
-            raise Exception("Out of bounds")
-
-        if warehouse.is_wall_at(new_x, new_y):
-            is_valid = False
-            break
-
-        increment += 1
-
-    return is_valid
-
-
 def recursively_push(warehouse: Warehouse, move: str):
-    if not is_move_valid(warehouse, move):
-        logger.debug(f"Invalid move {move}")
-        return None
-
-    boxes_to_push = warehouse.get_boxes_along(move)
-    logger.debug(f"Found {len(boxes_to_push)} boxes to push {boxes_to_push}")
-    warehouse.move_boxes(boxes_to_push, move)
-    warehouse.move_robot(move)
+    boxes_to_push, moving_status = warehouse.get_boxes_to_move(move)
+    if moving_status == MoveStatus.MOVING_WITH_BOX:
+        logger.debug(f"Found {len(boxes_to_push)} boxes to push {boxes_to_push}")
+        warehouse.move_boxes(boxes_to_push, move)
+    if moving_status != MoveStatus.BLOCKED_BY_WALL:
+        warehouse.move_robot(move)
 
     # only plot if the global environment variable is set
-    if "DEBUG" in globals():
+
+    if os.environ.get("LOGURU_LEVEL") == "DEBUG":
         warehouse.plot()
 
 
@@ -713,7 +745,7 @@ def part_1(file_path: str) -> int:
     Read the input file and return the solution.
     """
 
-    warehouse = Warehouse.from_input_file(file_path)
+    warehouse = Warehouse.from_input_file(file_path, part_number=1)
 
     warehouse.plot()
 
@@ -735,4 +767,44 @@ def part_2(file_path: str) -> int:
     Read the input file and return the solution.
     """
 
-    return 0
+    warehouse = Warehouse.from_input_file(file_path, part_number=2)
+
+    warehouse.plot()
+
+    warehouse.run_simulation()
+
+    scores = [box.get_score() for box in warehouse.boxes]
+    logger.debug(f"Scores: {scores}")
+
+    warehouse.plot()
+
+    return sum(scores)
+
+
+# run a game using user input
+if __name__ == "__main__":
+    # load the test file
+    warehouse = Warehouse.from_input_file(
+        "./inputs/day_15_input_test.txt", part_number=2
+    )
+
+    warehouse.plot()
+
+    # prompt the user for input using up down left right
+    # the user users the arrow keys to move the robot
+    while True:
+        move = input("Enter move: ")
+        if move == "q":
+            break
+
+        if move not in ["w", "s", "a", "d"]:
+            continue
+
+        # convert the arrow keys to the moves
+        move = {
+            "w": Movements.UP,
+            "s": Movements.DOWN,
+            "d": Movements.RIGHT,
+            "a": Movements.LEFT,
+        }[move]
+        recursively_push(warehouse, move)

@@ -75,8 +75,9 @@ Using the corrected prize coordinates, figure out how to win as many prizes as p
 
 import re
 from typing import Optional
-from loguru import logger
+
 import numpy as np
+from loguru import logger
 
 # Path: src/day_13.py
 # --- Part One ---
