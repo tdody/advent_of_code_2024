@@ -20,7 +20,7 @@ https://adventofcode.com/
 - [X] Day 13 Claw Contraption
 - [X] Day 14 Restroom Redoubt
 - [X] Day 15 Warehouse Woes
-- [ ] Day 16
+- [X] Day 16 Reindeer Maze
 - [ ] Day 17
 - [ ] Day 18
 - [ ] Day 19
