@@ -21,7 +21,7 @@ https://adventofcode.com/
 - [X] Day 14 Restroom Redoubt
 - [X] Day 15 Warehouse Woes
 - [X] Day 16 Reindeer Maze
-- [ ] Day 17
+- [X] Day 17 Chronospatial Computer
 - [ ] Day 18
 - [ ] Day 19
 - [ ] Day 20

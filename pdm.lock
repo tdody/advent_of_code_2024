@@ -5,7 +5,7 @@
 groups = ["default"]
 strategy = ["cross_platform", "inherit_metadata"]
 lock_version = "4.4.1"
-content_hash = "sha256:68e11064457bf002e75b2b466e51b5e837aec3f063c0f3e4ed89f7e639986878"
+content_hash = "sha256:0659b644bbd8f8f3a7a01d5b1257c5fa3ea79311554924abe25acc7e957e19fc"
 
 [[package]]
 name = "black"
@@ -427,6 +427,20 @@ marker = "python_version < \"3.11\""
 files = [
     {file = "tomli-2.2.1-py3-none-any.whl", hash = "sha256:cb55c73c5f4408779d0cf3eef9f762b9c9f147a77de7b258bef0a5628adc85cc"},
     {file = "tomli-2.2.1.tar.gz", hash = "sha256:cd45e1dc79c835ce60f7404ec8119f2eb06d38b1deba146f07ced3bbc44505ff"},
+]
+
+[[package]]
+name = "tqdm"
+version = "4.67.1"
+requires_python = ">=3.7"
+summary = "Fast, Extensible Progress Meter"
+groups = ["default"]
+dependencies = [
+    "colorama; platform_system == \"Windows\"",
+]
+files = [
+    {file = "tqdm-4.67.1-py3-none-any.whl", hash = "sha256:26445eca388f82e72884e0d580d5464cd801a3ea01e63e5601bdff9ba6a48de2"},
+    {file = "tqdm-4.67.1.tar.gz", hash = "sha256:f8aef9c52c08c13a65f30ea34f4e5aac3fd1a34959879d7e59e63027286627f2"},
 ]
 
 [[package]]

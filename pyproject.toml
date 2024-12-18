@@ -15,6 +15,7 @@ dependencies = [
     "numpy>=2.2.0",
     "matplotlib>=3.10.0",
     "networkx>=3.4.2",
+    "tqdm>=4.67.1",
 ]
 requires-python = "==3.10.*"
 readme = "README.md"
