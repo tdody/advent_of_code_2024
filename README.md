@@ -22,7 +22,7 @@ https://adventofcode.com/
 - [X] Day 15 Warehouse Woes
 - [X] Day 16 Reindeer Maze
 - [X] Day 17 Chronospatial Computer
-- [ ] Day 18
+- [X] Day 18 RAM Run
 - [ ] Day 19
 - [ ] Day 20
 - [ ] Day 21
