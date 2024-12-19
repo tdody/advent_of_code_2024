@@ -23,7 +23,7 @@ https://adventofcode.com/
 - [X] Day 16 Reindeer Maze
 - [X] Day 17 Chronospatial Computer
 - [X] Day 18 RAM Run
-- [ ] Day 19
+- [X] Day 19 Linen Layout
 - [ ] Day 20
 - [ ] Day 21
 - [ ] Day 22
