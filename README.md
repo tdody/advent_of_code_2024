@@ -24,7 +24,7 @@ https://adventofcode.com/
 - [X] Day 17 Chronospatial Computer
 - [X] Day 18 RAM Run
 - [X] Day 19 Linen Layout
-- [ ] Day 20
+- [X] Day 20 Race Condition
 - [ ] Day 21
 - [ ] Day 22
 - [ ] Day 23
