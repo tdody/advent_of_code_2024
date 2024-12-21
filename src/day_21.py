@@ -175,10 +175,16 @@ def paths(keymap: str) -> dict[tuple[str, str], list[str]]:
 
 @cache
 def presses(code: str, depth: int, keypad: str = NUMERIC) -> int:
+    # base case
     if depth == 1:
         return len(code)
 
+    # generate all possible paths between each pair of keys
     keypaths = paths(keypad)
+
+    # calculate the minimum number of presses required to type the code
+    # zip("A" + "029A", "029A") = [("A", "0"), ("0", "2"), ("2", "9"), ("9", "A")]
+    # recursively calculate the minimum number of presses required to navigate between each pair of keys
     return sum(
         min(presses(path + "A", depth - 1, DIRECTIONAL) for path in keypaths[pair])
         for pair in zip("A" + code, code)
