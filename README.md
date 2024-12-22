@@ -26,7 +26,7 @@ https://adventofcode.com/
 - [X] Day 19 Linen Layout
 - [X] Day 20 Race Condition
 - [X] Day 21 Keypad Conundrum
-- [ ] Day 22
+- [X] Day 22 Monkey Market
 - [ ] Day 23
 - [ ] Day 24
 - [ ] Day 25
