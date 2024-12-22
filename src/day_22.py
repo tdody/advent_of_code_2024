@@ -161,7 +161,7 @@ class Sequence:
     _price: int
     _previous_secret: Optional[int]
     _previous_price: Optional[int]
-    _prices: dict[tuple[int, int, int, int], int]
+    _prices: dict[tuple[int, ...], int]
     _price_differences: list[int]
 
     def __init__(self, secret: int):
@@ -175,11 +175,12 @@ class Sequence:
     def _get_price(self) -> int:
         return self._secret % 10
 
-    def get_prices(self) -> dict[tuple[int, int, int, int], int]:
+    def get_prices(self) -> dict[tuple[int, ...], int]:
         return self._prices
 
     def _update_differences(self) -> None:
-        self._price_differences.append(self._price - self._previous_price)
+        if self._previous_price is not None:
+            self._price_differences.append(self._price - self._previous_price)
 
         if len(self._price_differences) > 4:
             self._price_differences.pop(0)
@@ -190,7 +191,7 @@ class Sequence:
         ):
             self._prices[tuple(self._price_differences)] = self._price
 
-    def compute_step(self) -> int:
+    def compute_step(self) -> None:
         """
         Compute the next secret number and return the price.
         """
@@ -201,6 +202,8 @@ class Sequence:
         self._price = self._get_price()
 
         self._update_differences()
+
+        return None
 
 
 def read_code(file_path: str) -> list[int]:

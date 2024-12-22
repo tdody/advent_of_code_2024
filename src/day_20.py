@@ -288,9 +288,11 @@ class Grid:
             logger.debug(f"Height: {height}")
             logger.debug(f"Possible cheat count: {len(possible_cheats)}")
 
+            assert start is not None
+            assert end is not None
             return cls(G, start, end, width, height, possible_cheats)
 
-    def shortest_path(self) -> int:
+    def shortest_path(self) -> list | dict:
         return nx.shortest_path(self.graph, self.start, self.end)
 
     def shortest_path_length(self) -> int:

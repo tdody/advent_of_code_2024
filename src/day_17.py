@@ -153,7 +153,7 @@ class Instruction:
     @abstractmethod
     def compute(
         self, registers: dict[str, Register], combo: int, output: list[str]
-    ) -> tuple[int, list[int]]:
+    ) -> tuple[int, list[str]]:
         raise NotImplementedError
 
 
@@ -162,7 +162,7 @@ class ADV(Instruction):
 
     def compute(
         self, registers: dict[str, Register], combo: int, output: list[str]
-    ) -> tuple[int, list[int]]:
+    ) -> tuple[int, list[str]]:
         a_value = registers["A"].value
         combo_value = Combo(combo).get_value(registers)
 
@@ -178,7 +178,7 @@ class BXL(Instruction):
 
     def compute(
         self, registers: dict[str, Register], combo: int, output: list[str]
-    ) -> tuple[int, list[int]]:
+    ) -> tuple[int, list[str]]:
         b_value = registers["B"].value
         registers["B"].value = b_value ^ combo
         logger.debug(f"BXL: {b_value} ^ {combo} = {registers['B'].value} -> B")
@@ -190,7 +190,7 @@ class BST(Instruction):
 
     def compute(
         self, registers: dict[str, Register], combo: int, output: list[str]
-    ) -> tuple[int, list[int]]:
+    ) -> tuple[int, list[str]]:
         start_value = Combo(combo).get_value(registers)
         new_value = Combo(combo).get_value(registers) % 8
         registers["B"].value = new_value
@@ -203,7 +203,7 @@ class JNZ(Instruction):
 
     def compute(
         self, registers: dict[str, Register], combo: int, output: list[str]
-    ) -> tuple[int, list[int]]:
+    ) -> tuple[int, list[str]]:
         logger.debug(f"JNZ: {registers['A'].value}")
         if registers["A"].value != 0:
             return combo, output
@@ -215,7 +215,7 @@ class BXC(Instruction):
 
     def compute(
         self, registers: dict[str, Register], combo: int, output: list[str]
-    ) -> tuple[int, list[int]]:
+    ) -> tuple[int, list[str]]:
         b_value = registers["B"].value
         c_value = registers["C"].value
         registers["B"].value = b_value ^ c_value
@@ -228,7 +228,7 @@ class OUT(Instruction):
 
     def compute(
         self, registers: dict[str, Register], combo: int, output: list[str]
-    ) -> tuple[int, list[int]]:
+    ) -> tuple[int, list[str]]:
         start_value = Combo(combo).get_value(registers)
         new_value = start_value % 8
         output.append(new_value)
@@ -241,7 +241,7 @@ class BDV(Instruction):
 
     def compute(
         self, registers: dict[str, Register], combo: int, output: list[str]
-    ) -> tuple[int, list[int]]:
+    ) -> tuple[int, list[str]]:
         a_value = registers["A"].value
         combo_value = Combo(combo).get_value(registers)
         registers["B"].value = int(a_value // (2**combo_value))
@@ -256,7 +256,7 @@ class CDV(Instruction):
 
     def compute(
         self, registers: dict[str, Register], combo: int, output: list[str]
-    ) -> tuple[int, list[int]]:
+    ) -> tuple[int, list[str]]:
         a_value = registers["A"].value
         combo_value = Combo(combo).get_value(registers)
         registers["C"].value = int(a_value // (2**combo_value))
@@ -281,8 +281,8 @@ def read_input(file_path: str) -> tuple[dict[str, Register], Program]:
     return registers, program
 
 
-def run_instructions(registers: dict[str, Register], program: Program) -> list[int]:
-    output = []
+def run_instructions(registers: dict[str, Register], program: Program) -> list[str]:
+    output: list[str] = []
     instructions: dict[int, Instruction] = {
         0: ADV(),
         1: BXL(),
@@ -415,6 +415,8 @@ def part_2(file_path: str) -> int:
                 a_base_8 = dec_to_oct(a)
                 lower_bound = oct_to_dec(a_base_8 + "0")
                 break
+
+    return -1
 
 
 if __name__ == "__main__":

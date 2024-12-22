@@ -171,7 +171,7 @@ def djikstra_search(
     Returns the number of steps and the path.
     """
 
-    queue = [(start, 0, [])]
+    queue: list[tuple[tuple[int, int], int, list]] = [(start, 0, [])]
     visited = set([start])
 
     while queue:
@@ -256,3 +256,5 @@ def part_2(file_path: str) -> int:
 
             if step == -1:
                 return memory.corrupted[i]
+
+    return -1
