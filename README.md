@@ -27,6 +27,6 @@ https://adventofcode.com/
 - [X] Day 20 Race Condition
 - [X] Day 21 Keypad Conundrum
 - [X] Day 22 Monkey Market
-- [ ] Day 23
+- [X] Day 23 LAN Party
 - [ ] Day 24
 - [ ] Day 25
