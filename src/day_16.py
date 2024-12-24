@@ -137,13 +137,15 @@ import networkx as nx
 DIRECTIONS = [(-1, 0), (0, -1), (1, 0), (0, 1)]
 
 
-def read_input(file_path: str) -> tuple[nx.Graph, tuple[int, int], tuple[int, int]]:
+def read_input(
+    file_path: str,
+) -> tuple[nx.Graph, tuple[int, int, int], tuple[int, int, int]]:
     with open(file_path, "r") as f:
         data = f.read().splitlines()
         G = nx.DiGraph()
 
-        start = None
-        end = None
+        start: tuple[int, int, int] | None = None
+        end: tuple[int, int, int] | None = None
 
         # Find all the valid nodes
         for i, row in enumerate(data):
@@ -166,6 +168,14 @@ def read_input(file_path: str) -> tuple[nx.Graph, tuple[int, int], tuple[int, in
                 G.add_edge((x_n, y_n, dir_n), (m, n, dir_n), weight=1)
             for i in range(4):
                 G.add_edge((x_n, y_n, dir_n), (x_n, y_n, i), weight=1000)
+
+        # Ensure start and end are not None
+        assert start is not None, "Start node is None"
+        assert end is not None, "End node is None"
+
+        # Convert start and end to the expected type
+        start = (start[0], start[1], start[2])
+        end = (end[0], end[1], end[2])
 
         return G, start, end
 

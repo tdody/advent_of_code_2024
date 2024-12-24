@@ -279,9 +279,11 @@ class Grid:
             # for example, [(1, 2), (3, 4)] and [(3, 4), (1, 2)]
             # so we need to remove the duplicates
             possible_cheats = list(
-                set([tuple(sorted(cheat)) for cheat in possible_cheats])
+                [
+                    list(cheat)
+                    for cheat in set(tuple(sorted(cheat)) for cheat in possible_cheats)
+                ]
             )
-
             logger.debug(f"Start: {start}")
             logger.debug(f"End: {end}")
             logger.debug(f"Width: {width}")

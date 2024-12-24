@@ -151,7 +151,7 @@ def part_1(file_path: str) -> int:
 # --- Part Two ---
 
 
-def part_2(file_path: str) -> int:
+def part_2(file_path: str) -> str:
     """
     Read the input file and return the solution.
     """

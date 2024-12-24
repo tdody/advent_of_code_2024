@@ -231,7 +231,7 @@ class OUT(Instruction):
     ) -> tuple[int, list[str]]:
         start_value = Combo(combo).get_value(registers)
         new_value = start_value % 8
-        output.append(new_value)
+        output.append(str(new_value))
         logger.debug(f"OUT: {start_value} % 8 = {new_value}")
         return 2, output
 
