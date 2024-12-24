@@ -28,5 +28,5 @@ https://adventofcode.com/
 - [X] Day 21 Keypad Conundrum
 - [X] Day 22 Monkey Market
 - [X] Day 23 LAN Party
-- [ ] Day 24
+- [X] Day 24 Crossed Wires
 - [ ] Day 25
