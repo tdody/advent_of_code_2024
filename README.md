@@ -29,4 +29,4 @@ https://adventofcode.com/
 - [X] Day 22 Monkey Market
 - [X] Day 23 LAN Party
 - [X] Day 24 Crossed Wires
-- [ ] Day 25
+- [X] Day 25 Code Chronicle
